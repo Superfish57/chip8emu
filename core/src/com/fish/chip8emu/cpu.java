@@ -34,14 +34,14 @@ public class cpu {
     private byte[] V = new byte[16];
 
     private int I;
-    private short pc;
+    private int pc;
 
     private short delay_timer;
     private short sound_timer;
 
     //16 itmes
-    private short[] stack;
-    short sp;
+    private short[] stack = new short[16];
+    private int sp;
 
     //16 keys to kep track of
     private byte[] key;
@@ -144,42 +144,83 @@ public class cpu {
         printOpcode(opcode & 0xFFFF);
         switch ((opcode & 0xF000) >> 12){
 
+            case 0x0:
+                switch (opcode & 0x00FF){
+                    case 0xE0:
+                        for(byte pix: gfx){
+                            pix = 0;
+                        }
+
+                        pc =+ 2;
+                        break;
+
+                    case 0xEE:
+
+                        sp -= 1;
+                        pc = stack[sp];
+
+
+                        break;
+
+                    default:
+                        print("bad 0 code");
+                        pc +=2;
+                        break;
+
+                }
+                break;
+
             case 0xF:
                 switch (opcode & 0x00FF) {
                     case 0x07:
 
+                        V[opcode & 0x0F00] = (byte) delay_timer;
+                        pc =+2;
                         break;
 
                     case 0x0A:
-
+                            print("Not finished F code");
                         break;
 
                     case 0x15:
                         delay_timer = (short) (opcode & 0x0F00);
+                        pc += 2;
                         break;
 
                     case 0x18:
-
+                            print("Not finished F code");
                         break;
 
                     case 0x1E:
-
+                            print("Not finished F code");
                         break;
 
                     case 0x29:
 
+                        int sourceRegister = (opcode & 0x0F00) >> 8;
+                        I = V[sourceRegister] * 5;
+                        pc += 2;
                         break;
 
                     case 0x33:
 
+                        memory[I]     = (byte) (V[(opcode & 0x0F00) >> 8] / 100);
+                        memory[I + 1] = (byte) ((V[(opcode & 0x0F00) >> 8] / 10) % 10);
+                        memory[I + 2] = (byte) ((V[(opcode & 0x0F00) >> 8] % 100) % 10);
+                        pc += 2;
                         break;
 
                     case 0x55:
-
+                            print("Not finished F code");
                         break;
 
                     case 0x65:
 
+                        int numRegisters = (opcode & 0x0F00) >> 8;
+                        for (int counter = 0; counter <= numRegisters; counter++) {
+                            V[counter] = memory[I + counter];
+                        }
+                        pc += 2;
                         break;
 
                     default:
@@ -196,14 +237,23 @@ public class cpu {
                 break;
 
             case 0x2:
-
+                stack[sp] = (short) pc;
+                sp++;
+                pc = (short) (opcode & 0x0FFF);
 
             case 0x3 :
-                if(V[opcode & 0x0F00] == (opcode & 0x00FF)){
+
+                if(V[(opcode & 0x0F00) >> 8] == (opcode & 0x00FF)){
                     pc += 4;
                 }
             case 0x6:
                 V[(opcode & 0x0F0) >> 8] = (byte) (opcode & 0x00FF);
+                pc += 2;
+                break;
+
+            case 0x7:
+                short add1 = (short) (opcode & 0x00FF);
+                V[(opcode &0x0F00) >> 8] = (byte) (V[(opcode &0x0F00) >> 8] + add1);
                 pc += 2;
                 break;
 
@@ -253,10 +303,20 @@ public class cpu {
                 }
 
 
-                print("Exiting game!");
+                //print("Exiting game!");
                 //Gdx.app.exit();
+                pc += 2;
 
         }
+
+        if(delay_timer > 0){
+            delay_timer -= 1;
+        }
+
+        if(sound_timer > 0){
+            sound_timer -= 1;
+        }
+
     }
 
 
