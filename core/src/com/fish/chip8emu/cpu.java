@@ -99,6 +99,10 @@ public class cpu {
 
     }
 
+    public byte[] getGfx() {
+        return gfx;
+    }
+
     public void loadGame(String path) {
 
         FileHandle gameHandle = Gdx.files.internal(path);
@@ -192,7 +196,7 @@ public class cpu {
                 break;
 
             case 0x2:
-                
+
 
             case 0x3 :
                 if(V[opcode & 0x0F00] == (opcode & 0x00FF)){
