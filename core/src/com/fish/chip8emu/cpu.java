@@ -188,7 +188,8 @@ public class cpu {
                         break;
 
                     case 0x18:
-                            print("Not finished F code");
+                        sound_timer = (short) (opcode & 0x0F00);
+                        pc += 2;
                         break;
 
                     case 0x1E:
