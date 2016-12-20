@@ -27,7 +27,7 @@ public class chip8emu extends ApplicationAdapter {
 
 
 		mCpu.initialize();
-		mCpu.loadGame("games/PONG");
+		mCpu.loadGame("games/TETRIS");
 	}
 
 
