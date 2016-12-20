@@ -193,7 +193,7 @@ public class cpu {
                         break;
 
                     case 0x1E:
-                            print("Not finished F code");
+                            I =+ V[(opcode & 0x0F00) >> 8];
                         break;
 
                     case 0x29:
