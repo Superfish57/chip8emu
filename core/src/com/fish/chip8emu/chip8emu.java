@@ -59,7 +59,7 @@ public class chip8emu extends ApplicationAdapter {
 
 		batch.begin();
 
-		inc = 0;
+
 
 		for(int i = 0; i < 32; i++){
 			for(int j = 0; j < 64; j++){
@@ -68,7 +68,7 @@ public class chip8emu extends ApplicationAdapter {
 				Sprite pixSprite = new Sprite(Pixel);
 				if(graphics[i*64+j] != 0) {
 					pixSprite.setX(j*10);
-					pixSprite.setY(i*10);
+					pixSprite.setY(310 - (i*10));
 //					System.out.println("j: " + j + " i: " + i);
 
 					pixSprite.draw(batch);
@@ -76,30 +76,6 @@ public class chip8emu extends ApplicationAdapter {
 			}
 		}
 		batch.end();
-
-
-
-
-		/*
-		for (float count = 0; count < 2048; count ++){
-			y = (int) Math.floor(count / 64);
-			x = inc;
-			inc += 10;
-			if(inc > 63){
-				inc = 0;
-			}
-			System.out.println("Y: " + y + " X: " + x * 10);
-			if(graphics[(int) count] == 1){
-				Sprite pixSprite = new Sprite(Pixel);
-				pixSprite.setX(x);
-				pixSprite.setY((31 - y) * 10);
-				pixSprite.draw(batch);
-			}
-		}
-		*/
-
-
-
 
 
 
