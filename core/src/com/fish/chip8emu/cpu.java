@@ -179,7 +179,7 @@ public class cpu {
                         break;
 
                     case 0x0A:
-                            print("Not finished F code");
+                            print("Not implemented F code");
                         break;
 
                     case 0x15:
@@ -212,7 +212,7 @@ public class cpu {
                         break;
 
                     case 0x55:
-                            print("Not finished F code");
+                            print("Not implemented F code");
                         break;
 
                     case 0x65:
@@ -238,8 +238,8 @@ public class cpu {
                 break;
 
             case 0x2:
-                stack[sp] = (short) pc;
-                sp++;
+                stack[sp++] = (short) pc;
+
                 pc = (short) (opcode & 0x0FFF);
 
             case 0x3 :

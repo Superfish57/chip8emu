@@ -4,18 +4,24 @@ package com.fish.chip8emu;
  * Created by User on 12/19/2016.
  */
 public class utils {
-    public static void print(String text){
+
+
+    public static void print(String text) {
+
         System.out.println(text);
     }
 
-    public static void printOpcode(int opcode){
+    public static void printOpcode(int opcode) {
         print(String.format("%02X", opcode & 0xFFFF));
         //System.out.println(opcode);
     }
 
-    public static Boolean isBitSet(byte b, int bit)
-    {
+    public static Boolean isBitSet(byte b, int bit) {
         return (b & (1 << bit)) != 0;
     }
 
-}
+
+
+
+    }
+
