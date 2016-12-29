@@ -114,7 +114,7 @@ public class cpu {
         if(debug) {
 
             for (int i = 0; i < bytes.length; i = i + 2) {
-                System.out.println("0x" + String.format("%02X", bytes[i]) + String.format("%02X", bytes[i + 1]));
+                System.out.println(String.format(  "%02X", i + 0x200 & 0xFFFF) + "  --  " + "0x" + String.format("%02X", bytes[i]) + String.format("%02X", bytes[i + 1]));
             }
         }
         System.out.println("Loading game into memory...");
@@ -141,7 +141,9 @@ public class cpu {
         opcode = bb.getShort(0);
 
         //opcode = (short) ((memory[pc] << 8) | memory[pc+1]);
-        printOpcode(opcode & 0xFFFF);
+        //printOpcode(opcode & 0xFFFF);
+        System.out.println(String.format( "%02X", pc & 0xFFFF) + "    -    " + String.format(  "%02X", opcode & 0xFFFF));
+
         switch ((opcode & 0xF000) >> 12){
 
             case 0x1:
@@ -162,8 +164,11 @@ public class cpu {
                     case 0xEE:
 
                         sp--;
-                        pc = stack[sp];
-                        System.out.println(stack[sp] + "+++++++++++RETURN+++++++");
+                        pc = stack[sp] + 2;
+
+
+
+                        System.out.println(String.format(  "%02X", stack[sp] & 0xFFFF) + "  +++++++++++RETURN+++++++");
 
                         break;
 
@@ -180,7 +185,7 @@ public class cpu {
                     case 0x07:
 
                         V[(opcode & 0x0F00) >> 8] = (byte) delay_timer;
-                        pc =+2;
+                        pc += 2;
                         break;
 
                     case 0x0A:
@@ -247,17 +252,17 @@ public class cpu {
 
 
                 stack[sp] = pc;
-
-                pc = (opcode & 0x0FFF);
                 sp++;
-                System.out.println(stack[sp] + "=======GOTO======" + pc);
+                pc = (opcode & 0x0FFF);
+
+                System.out.println("======= GOTO " + (String.format(  "%02X", pc & 0xFFFF)) + " =======");
                 break;
             case 0x3 :
 
                 if(V[(opcode & 0x0F00) >> 8] == (opcode & 0x00FF)){
                     pc += 4;
                 } else {
-                    pc =+ 2;
+                    pc += 2;
                 }
                 break;
             case 0x6:
@@ -325,12 +330,15 @@ public class cpu {
                 }
 
 
-                //print("Exiting game!");
-                //Gdx.app.exit();
+                print("Exiting game!");
+                Gdx.app.exit();
                 pc += 2;
                 break;
 
         }
+
+
+
 
         if(delay_timer > 0){
             delay_timer -= 1;
