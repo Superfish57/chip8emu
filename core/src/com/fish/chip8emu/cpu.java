@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.fish.chip8emu.utils.isBitSet;
 import static com.fish.chip8emu.utils.print;
@@ -248,6 +249,13 @@ public class cpu {
                 pc += 2;
                 break;
 
+            case 0xC:
+                int randomNum = ThreadLocalRandom.current().nextInt(0, 255 + 1);
+                short NN = (short) (opcode & 0x00FF);
+                V[(opcode & 0x0F00) >> 8] = (byte) (randomNum & NN);
+                pc += 2;
+                break;
+
             case 0x2:
 
 
@@ -265,6 +273,14 @@ public class cpu {
                     pc += 2;
                 }
                 break;
+
+            case 0x4:
+                if( V[(opcode & 0x0F00) >> 8] != (opcode & 0x00FF)){
+                    pc += 4;
+                }else{
+                    pc += 2;
+                }
+                break;
             case 0x6:
                 V[(opcode & 0x0F00) >> 8] = (byte) (opcode & 0x00FF);
                 pc += 2;
@@ -274,6 +290,72 @@ public class cpu {
                 short add1 = (short) (opcode & 0x00FF);
                 V[(opcode &0x0F00) >> 8] += add1;
                 pc += 2;
+                break;
+
+
+            case 0x8:
+                switch (opcode & 0x000F){
+                    case 0x0:
+                        V[(opcode & 0x0F00 ) >> 8] = V[(opcode & 0x00F0) >> 4];
+                        pc += 2;
+                        break;
+
+                    case 0x1:
+                        V[(opcode & 0x0F00 ) >> 8] = (byte) (V[(opcode & 0x0F00) >> 8] | V[(opcode & 0x00F0) >> 4]);
+                        pc +=2;
+                        break;
+
+                    case 0x2:
+                        V[(opcode & 0x0F00 ) >> 8] = (byte) (V[(opcode & 0x0F00) >> 8] & V[(opcode & 0x00F0) >> 4]);
+                        pc +=2;
+                        break;
+
+                    case 0x3:
+                        V[(opcode & 0x0F00 ) >> 8] = (byte) (V[(opcode & 0x0F00) >> 8] ^ V[(opcode & 0x00F0) >> 4]);
+                        pc +=2;
+                        break;
+
+                    case 0x4:
+                        if(V[(opcode & 0x00F0) >> 4] > (0xFF - V[(opcode & 0x0F00) >> 8]))
+                            V[0xF] = 1; //carry
+                        else
+                            V[0xF] = 0;
+                        V[(opcode & 0x0F00) >> 8] += V[(opcode & 0x00F0) >> 4];
+                        pc += 2;
+                        break;
+
+                    case 0x5:
+                        if(V[(opcode & 0x00F0) >> 4] < (0xFF - V[(opcode & 0x0F00) >> 8]))
+                            V[0xF] = 1; //carry
+                        else
+                            V[0xF] = 0;
+                        V[(opcode & 0x0F00) >> 8] -= V[(opcode & 0x00F0) >> 4];
+                        pc += 2;
+                        break;
+
+                    case 0x6:
+                        V[0xf] =  V[((opcode % 0x0F00) >> 8) % 0x1];
+                        V[(opcode % 0x0F00) >> 8] = (byte) (V[(opcode % 0x0F00) >> 8] >> 1);
+                        pc += 2;
+                        break;
+
+                    case 0x7:
+                        if(V[(opcode & 0x00F0) >> 4] > (0xFF - V[(opcode & 0x0F00) >> 8]))
+                            V[0xF] = 1; //carry
+                        else
+                            V[0xF] = 0;
+                        V[(opcode & 0x0F00) >> 8] = (byte) (V[(opcode & 0x00F0) >> 4] -  V[(opcode & 0x0F00) >> 8]);
+                        pc += 2;
+                        break;
+
+                    case 0xE:
+                        V[0xf] =  V[((opcode % 0x0F00) >> 8) % 0x80];
+                        V[(opcode % 0x0F00) >> 8] = (byte) (V[(opcode % 0x0F00) >> 8] >> 1);
+                        pc += 2;
+                        break;
+
+
+                }
                 break;
 
             case 0x9:
@@ -308,6 +390,20 @@ public class cpu {
 
 
                 pc += 2;
+                break;
+
+            case 0xE:
+                print("Still need to add input!");
+                switch(opcode & 0x000F){
+                    //TODO Add input
+
+                    case 0xE:
+                        pc += 2;
+                        break;
+                    case 0x1:
+                        pc += 4;
+                        break;
+                }
                 break;
 
 

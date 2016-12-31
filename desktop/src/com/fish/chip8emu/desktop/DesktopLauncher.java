@@ -7,8 +7,7 @@ import com.fish.chip8emu.chip8emu;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.foregroundFPS =60;
-		config.backgroundFPS = 60;
+
 
 		config.height = 320;
 		config.width = 640;
