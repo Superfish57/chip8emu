@@ -31,7 +31,7 @@ public class chip8emu extends ApplicationAdapter {
 		Pixel = new Texture("pixel.png");
 
 		mCpu.initialize();
-		mCpu.loadGame("games/PONG");
+		mCpu.loadGame("games/MISSILE");
 
 
 
@@ -41,38 +41,41 @@ public class chip8emu extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		mCpu.emulateCycle();
+		for(int k = 0; k < 17; k ++) {
 
-		graphics = mCpu.getGfx();
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
-		batch.begin();
+			mCpu.emulateCycle();
 
 
-
-		for(int i = 0; i < 32; i++){
-			for(int j = 0; j < 64; j++){
+			graphics = mCpu.getGfx();
 
 
-				Sprite pixSprite = new Sprite(Pixel);
-				if(graphics[i*64+j] != 0) {
-					pixSprite.setX(j*10);
-					pixSprite.setY(310 - (i*10));
+			batch.begin();
+
+
+			for (int i = 0; i < 32; i++) {
+				for (int j = 0; j < 64; j++) {
+
+
+					Sprite pixSprite = new Sprite(Pixel);
+					if (graphics[i * 64 + j] != 0) {
+						pixSprite.setX(j * 10);
+						pixSprite.setY(310 - (i * 10));
 //					System.out.println("j: " + j + " i: " + i);
 
-					pixSprite.draw(batch);
+						pixSprite.draw(batch);
+					}
 				}
 			}
+			batch.end();
+
+			Gdx.graphics.setTitle(String.valueOf(Gdx.graphics.getFramesPerSecond()));
+
+
 		}
-		batch.end();
-
-
-
-
 
 	}
 	

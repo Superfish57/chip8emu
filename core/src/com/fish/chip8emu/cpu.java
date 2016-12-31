@@ -40,6 +40,8 @@ public class cpu {
     private short delay_timer;
     private short sound_timer;
 
+    public boolean doneCalc;
+
     //16 itmes
     private int[] stack = new int[16];
     private int sp;
@@ -135,6 +137,7 @@ public class cpu {
 
     public void emulateCycle(){
 
+        doneCalc = false;
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.BIG_ENDIAN);
         bb.put(memory[pc]);
@@ -205,6 +208,7 @@ public class cpu {
 
                     case 0x1E:
                             I =+ V[(opcode & 0x0F00) >> 8];
+                            pc+=2;
                         break;
 
                     case 0x29:
@@ -373,7 +377,7 @@ public class cpu {
                 short height = (short) (opcode & 0x000F);
                 byte pixel;
 
-                V[0xf] = 0;
+                V[0xF] = 0;
                 for (int yline = 0; yline < height; yline++)
                 {
                     pixel = memory[I + yline];
@@ -381,8 +385,10 @@ public class cpu {
                     {
                         if((pixel & (0x80 >> xline)) != 0)
                         {
-                            if(gfx[(x + xline + ((y + yline) * 64))] == 1)
-                                V[0xf] = 1;
+                            if(gfx[(x + xline + ((y + yline) * 64))] == 1){
+                                V[0xF] = 1;
+                            }
+
                             gfx[x + xline + ((y + yline) * 64)] ^= 1;
                         }
                     }
@@ -444,30 +450,12 @@ public class cpu {
             sound_timer -= 1;
         }
 
+        doneCalc = true;
+
     }
 
 
-    /*
-                short x = V[(opcode & 0x0F00) >> 8];
-                short y = V[(opcode & 0x00F0) >> 4];
-                short height = (short) (opcode & 0x000F);
-                byte pixel;
 
-                V[0xf] = 0;
-                for (int yline = 0; yline < height; yline++)
-                {
-                    pixel = memory[I + yline];
-                    for(int xline = 0; xline < 8; xline++)
-                    {
-                        if((pixel & (0x80 >> xline)) != 0)
-                        {
-                            if(gfx[(x + xline + ((y + yline) * 64))] == 1)
-                                V[0xf] = 1;
-                            gfx[x + xline + ((y + yline) * 64)] ^= 1;
-                        }
-                    }
-                }
-*/
 
 
 
