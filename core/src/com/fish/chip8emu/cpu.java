@@ -42,12 +42,12 @@ public class cpu {
 
     public boolean doneCalc;
 
-    //16 itmes
+    //16 items
     private int[] stack = new int[16];
     private int sp;
 
     //16 keys to kep track of
-    private byte[] key;
+    byte[] key = new byte[16];
 
 
     private short[] fontset = {
@@ -399,15 +399,23 @@ public class cpu {
                 break;
 
             case 0xE:
-                print("Still need to add input!");
                 switch(opcode & 0x000F){
-                    //TODO Add input
+
 
                     case 0xE:
-                        pc += 2;
+                        if(key[(opcode & 0x0F00) >> 8] == 1){
+                            pc+=4;
+                        }else{
+                           pc +=2;
+                        }
+
                         break;
                     case 0x1:
-                        pc += 4;
+                        if(key[(opcode & 0x0F00) >> 8] == 0){
+                            pc+=2;
+                        }else{
+                            pc +=4;
+                        }
                         break;
                 }
                 break;
@@ -452,6 +460,10 @@ public class cpu {
 
         doneCalc = true;
 
+    }
+
+    public void fuckMyShitUpFam(){
+        pc = 0;
     }
 
 
