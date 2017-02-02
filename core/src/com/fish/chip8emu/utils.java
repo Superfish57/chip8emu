@@ -16,12 +16,4 @@ public class utils {
         //System.out.println(opcode);
     }
 
-    public static Boolean isBitSet(byte b, int bit) {
-        return (b & (1 << bit)) != 0;
-    }
-
-
-
-
-    }
-
+}

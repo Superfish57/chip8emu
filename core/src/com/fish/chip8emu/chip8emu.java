@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class chip8emu extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -35,7 +34,7 @@ public class chip8emu extends ApplicationAdapter {
 		MyInputProcessor inputProcessor = new MyInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
 		mCpu.initialize();
-		mCpu.loadGame("games/MISSILE");
+		mCpu.loadGame("games/VERS");
 
 
 
@@ -167,7 +166,7 @@ class MyInputProcessor implements InputProcessor {
 				break;
 
 			case Input.Keys.SPACE:
-				chip8emu.mCpu.fuckMyShitUpFam();
+				chip8emu.mCpu.partialReload();
 
 		}
 

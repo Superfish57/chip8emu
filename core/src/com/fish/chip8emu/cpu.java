@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.fish.chip8emu.utils.isBitSet;
+
 import static com.fish.chip8emu.utils.print;
 import static com.fish.chip8emu.utils.printOpcode;
 
@@ -162,7 +162,7 @@ public class cpu {
                             gfx[i] = 0;
                         }
 
-                        pc =+ 2;
+                        pc += 2;
                         break;
 
                     case 0xEE:
@@ -207,7 +207,7 @@ public class cpu {
                         break;
 
                     case 0x1E:
-                            I =+ V[(opcode & 0x0F00) >> 8];
+                            I += V[(opcode & 0x0F00) >> 8];
                             pc+=2;
                         break;
 
@@ -462,7 +462,7 @@ public class cpu {
 
     }
 
-    public void fuckMyShitUpFam(){
+    public void partialReload(){
         pc = 0;
     }
 
