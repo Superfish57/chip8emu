@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class chip8emu extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -34,53 +38,66 @@ public class chip8emu extends ApplicationAdapter {
 		MyInputProcessor inputProcessor = new MyInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
 		mCpu.initialize();
-		mCpu.loadGame("games/VERS");
+		mCpu.loadGame("games/TETRIS");
 
+		Timer.schedule(new Timer.Task(){
+						   @Override
+						   public void run() {
+							   mCpu.emulateCycle();
+						   }
+					   }
+				, 0        //    (delay)
+				, 1/500f     //    (seconds)
+		);
 
 
 	}
 
-
+	double lastTime = 0;
 
 	@Override
 	public void render () {
 
-		for(int k = 0; k < 17; k ++) {
+
+		//for(int k = 0; k < 20; k ++) {
 
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-			mCpu.emulateCycle();
+
 
 
 			graphics = mCpu.getGfx();
 
-
-			batch.begin();
-
-
-			for (int i = 0; i < 32; i++) {
-				for (int j = 0; j < 64; j++) {
-
-
-					Sprite pixSprite = new Sprite(Pixel);
-					if (graphics[i * 64 + j] != 0) {
-						pixSprite.setX(j * 10);
-						pixSprite.setY(310 - (i * 10));
-//					System.out.println("j: " + j + " i: " + i);
-
-						pixSprite.draw(batch);
-
-					}
-				}
-			}
-			batch.end();
+			drawScreen();
 
 			Gdx.graphics.setTitle(String.valueOf(Gdx.graphics.getFramesPerSecond()));
 
 
-		}
+		//}
 
+	}
+
+	public void drawScreen(){
+		batch.begin();
+
+
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 64; j++) {
+
+
+				Sprite pixSprite = new Sprite(Pixel);
+				if (graphics[i * 64 + j] != 0) {
+					pixSprite.setX(j * 10);
+					pixSprite.setY(310 - (i * 10));
+//					System.out.println("j: " + j + " i: " + i);
+
+					pixSprite.draw(batch);
+
+				}
+			}
+		}
+		batch.end();
 	}
 	
 	@Override

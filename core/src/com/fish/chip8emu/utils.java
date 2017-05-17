@@ -8,7 +8,7 @@ public class utils {
 
     public static void print(String text) {
 
-        System.out.println(text);
+        //System.out.println(text);
     }
 
     public static void printOpcode(int opcode) {

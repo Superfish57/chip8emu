@@ -394,6 +394,8 @@ public class cpu {
                     }
                 }
 
+                
+
 
                 pc += 2;
                 break;
