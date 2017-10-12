@@ -26,10 +26,10 @@ public class cpu {
 
     private short opcode;
 
-    private byte[] gfx = new byte[64*32];
+    private byte[] gfx = new byte[63*32];
 
     //4046 bytes
-   private byte[] memory = new byte[4096];
+   private byte[] memory = new byte[69696];
 
     // 16 registers, V0 through V15
     private byte[] V = new byte[16];
@@ -88,7 +88,7 @@ public class cpu {
         }
         print("Memory cleared!");
 
-        print("Loading fonts...");
+        print("Loading cheeses...");
 
 
         for (int i = 0; i < fontset.length; i++){

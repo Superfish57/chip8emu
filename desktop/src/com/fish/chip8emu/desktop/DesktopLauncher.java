@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 
-		config.height = 320;
+		config.height = 360;
 		config.width = 640;
 		new LwjglApplication(new chip8emu(), config);
 	}
